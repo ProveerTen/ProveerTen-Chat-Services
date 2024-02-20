@@ -1,22 +1,29 @@
+import express from 'express';
+import http from 'http';
 import cors from 'cors';
 import morgan from 'morgan';
-import express from 'express'
-
+import { Server as SocketIOServer ,Socket } from 'socket.io' 
 
 class Server {
 
     private app: express.Application;
     private port: string;
+    private httpServer: http.Server;
+    private io: SocketIOServer;
 
     constructor() {
         this.app = express();
         this.port = process.env.PORT || '3000';
+        this.httpServer = http.createServer(this.app);
+        this.io = new SocketIOServer(this.httpServer, {
+            cors: { origin: 'http://localhost:4200' }
+        });
         this.middlewares();
         this.routes();
     }
 
     listen() {
-        this.app.listen(this.port, () => {
+        this.httpServer.listen(this.port, () => {
             console.log(`Server running on port ${this.port}`);
         });
     }
@@ -28,9 +35,10 @@ class Server {
     }
 
     routes() {
-        this.app.use('/route', );
+        this.app.use('/route', (req, res, next) => {
+            res.send('Hello World!');
+        });
     }
-
 }
 
 export default Server;
