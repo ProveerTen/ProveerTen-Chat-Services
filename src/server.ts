@@ -3,6 +3,7 @@ import http from 'http';
 import cors from 'cors';
 import morgan from 'morgan';
 import { Server as SocketIOServer ,Socket } from 'socket.io' 
+import provider from './routes/provider';
 
 class Server {
 
@@ -13,6 +14,7 @@ class Server {
 
     constructor() {
         this.app = express();
+    
         this.port = process.env.PORT || '3000';
         this.httpServer = http.createServer(this.app);
         this.io = new SocketIOServer(this.httpServer, {
@@ -24,8 +26,12 @@ class Server {
 
     listen() {
         this.httpServer.listen(this.port, () => {
-            console.log(`Server running on port ${this.port}`);
+            console.log(`Server chat running on port ${this.port}`);
         });
+        
+        this.app.listen(3000, () => {
+            console.log(`Server running on port 3000`);
+        }); 
     }
 
     middlewares() {
@@ -35,9 +41,11 @@ class Server {
     }
 
     routes() {
-        this.app.use('/route', (req, res, next) => {
+        this.app.use('/route', (req, res) => {
             res.send('Hello World!');
         });
+
+        this.app.use('/provider', provider);
     }
 }
 
