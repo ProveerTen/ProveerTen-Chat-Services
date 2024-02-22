@@ -3,7 +3,7 @@ import http from 'http';
 import cors from 'cors';
 import morgan from 'morgan';
 import { Server as SocketIOServer ,Socket } from 'socket.io' 
-
+import provider from './routes/provider';
 
 class Server {
 
@@ -44,7 +44,8 @@ class Server {
         this.app.use('/route', (req, res) => {
             res.send('Hello World!');
         });
+
+        this.app.use('/provider', provider);
     }
 }
-
-export default Server;
+export default Server
