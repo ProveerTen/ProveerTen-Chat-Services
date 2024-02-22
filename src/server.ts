@@ -4,6 +4,7 @@ import cors from 'cors';
 import morgan from 'morgan';
 import { Server as SocketIOServer ,Socket } from 'socket.io' 
 import provider from './routes/provider';
+import chat from './routes/chat'
 
 class Server {
 
@@ -46,6 +47,7 @@ class Server {
         });
 
         this.app.use('/provider', provider);
+        this.app.use ('/chat', chat)
     }
 }
 export default Server
