@@ -4,7 +4,7 @@ export const getData = (data: any): Promise<any> => {
 
         console.log("Proc" , data);
         
-    const query = 'call procedure get_providers_city (?,?)';
+    const query = 'call get_providers_city (?,?)';
     return new Promise((resolve, reject) => {
 
         pool.getConnection((err, connection) => {
@@ -17,6 +17,8 @@ export const getData = (data: any): Promise<any> => {
                 if (error) {
                     return reject(error)
                 }
+                console.log(result[0]);
+                
                 resolve(result)
             })
         })

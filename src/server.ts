@@ -4,18 +4,20 @@ import cors from 'cors';
 import morgan from 'morgan';
 import { Server as SocketIOServer ,Socket } from 'socket.io' 
 import provider from './routes/provider';
+import chat from './routes/chat'
 
 class Server {
 
     private app: express.Application;
     private port: string;
+    private port_chat: string;
     private httpServer: http.Server;
     private io: SocketIOServer;
 
     constructor() {
         this.app = express();
-    
         this.port = process.env.PORT || '3000';
+        this.port_chat = process.env.PORT_CHAT || '10000';
         this.httpServer = http.createServer(this.app);
         this.io = new SocketIOServer(this.httpServer, {
             cors: { origin: 'http://localhost:4200' }
@@ -26,11 +28,11 @@ class Server {
 
     listen() {
         this.httpServer.listen(this.port, () => {
-            console.log(`Server chat running on port ${this.port}`);
+            console.log(`Server chat running on port ${this.port_chat}`);
         });
         
-        this.app.listen(3000, () => {
-            console.log(`Server running on port 3000`);
+        this.app.listen(this.port_chat, () => {
+            console.log(`Server running on port ${this.port}`);
         }); 
     }
 
@@ -46,6 +48,7 @@ class Server {
         });
 
         this.app.use('/provider', provider);
+        this.app.use ('/chat', chat)
     }
 }
 export default Server
