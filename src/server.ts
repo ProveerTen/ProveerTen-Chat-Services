@@ -2,9 +2,10 @@ import express from 'express';
 import http from 'http';
 import cors from 'cors';
 import morgan from 'morgan';
-import { Server as SocketIOServer ,Socket } from 'socket.io' 
+import { Server as SocketIOServer } from 'socket.io'
 import provider from './routes/provider';
 import chat from './routes/chat'
+import socketController from './controllers/socket-controller';
 
 class Server {
 
@@ -17,23 +18,24 @@ class Server {
     constructor() {
         this.app = express();
         this.port = process.env.PORT || '3000';
-        this.port_chat = process.env.PORT_CHAT || '10000';
+        this.port_chat = process.env.PORT_CHAT || '10101';
         this.httpServer = http.createServer(this.app);
         this.io = new SocketIOServer(this.httpServer, {
             cors: { origin: 'http://localhost:4200' }
         });
         this.middlewares();
         this.routes();
+        socketController(this.io);
     }
 
     listen() {
-        this.httpServer.listen(this.port, () => {
+        this.httpServer.listen(this.port_chat, () => {
             console.log(`Server chat running on port ${this.port_chat}`);
         });
-        
-        this.app.listen(this.port_chat, () => {
+
+        this.app.listen(this.port, () => {
             console.log(`Server running on port ${this.port}`);
-        }); 
+        });
     }
 
     middlewares() {
@@ -48,7 +50,7 @@ class Server {
         });
 
         this.app.use('/provider', provider);
-        this.app.use ('/chat', chat)
+        this.app.use('/chat', chat)
     }
 }
 export default Server

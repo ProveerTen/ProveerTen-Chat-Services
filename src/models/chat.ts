@@ -38,7 +38,7 @@ const messageSchema = new Schema<IMessage>({
 
 const chatSchema = new Schema({
     _id: String,
-    participants: [String],
+    participants: Object,
     messages: [messageSchema]
 });
 

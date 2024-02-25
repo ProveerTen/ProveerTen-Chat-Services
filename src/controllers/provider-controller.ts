@@ -1,12 +1,21 @@
 import { Request, Response } from "express";
-import { getData } from "../service/provider";
+import { get_providers_city } from "../service/provider";
 
 
-export const idProvider = async (req: Request, res: Response) => {
-    const data = {
-        companyId : req.body.companyId,
-        grocerId : req.body.grocerId 
+export const filter_providers_city = async (req: Request, res: Response) => {
+
+    try {
+        const data = {
+            companyId: req.body.companyId,
+            grocerId: req.body.grocerId
+        }
+       
+        
+        let providersbycity = await get_providers_city(data);
+        res.status(200).json({ providersbycity })
     }
-      await getData(data);
-      res.status(200).json({ message: 'Ok' })
+    catch (error) {
+        res.status(400).json({ message: "Error internal server" })
+    }
+
 }

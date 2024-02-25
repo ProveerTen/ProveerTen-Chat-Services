@@ -1,9 +1,9 @@
 import { Router } from "express";
 import mongoose from "mongoose";
-import { idProvider } from "../controllers/provider-controller";
+import { filter_providers_city } from "../controllers/provider-controller";
 
 const router = Router();
 
-router.post('/getproviders', idProvider)
+router.post('/city', filter_providers_city)
 
 export default router;
