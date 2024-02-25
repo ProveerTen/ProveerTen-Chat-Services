@@ -22,7 +22,9 @@ export default function socketController(io: SocketIOServer) {
 
             console.log('Message received:', message);
 
-            const prompt = `En el lenguaje y dialecto colombiano y de la region del caribe colombiano, evalúa la palabra "${message.mensaje}" por su carácter ofensivo o grosero. Responde con "SÍ" si es una grosería o una ofensa, o "NO" si no lo es.`;
+            // const prompt = `En el lenguaje y dialecto colombiano y de la region del caribe colombiano, evalúa la palabra "${message.mensaje}" por su carácter ofensivo o grosero. Responde con "SÍ" si es una grosería o una ofensa, o "NO" si no lo es.`;
+            const prompt = `En el lenguaje y dialecto colombiano y de la regiones de Colombia "${message.mensaje}" por su carácter ofensivo o grosero. Responde con "SÍ" si es una grosería o una ofensa, o "NO" si no lo es.`;
+            
             // const prompt = `En el lenguaje colombiano, considera la palabra "${message.mensaje}" utilizada de forma potencialmente ofensiva. ¿Es una grosería o una ofensa? Responde con "SI" o "NO".`
 
 
