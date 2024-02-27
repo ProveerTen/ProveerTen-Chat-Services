@@ -20,8 +20,9 @@ class Server {
         this.port = process.env.PORT || '3000';
         this.port_chat = process.env.PORT_CHAT || '10101';
         this.httpServer = http.createServer(this.app);
+        const allowedOrigins = ['https://proveerten.netlify.app','https://proveer-ten-front-end-git-hu-featurechat-bryctans-projects.vercel.app','http://localhost:4200'];
         this.io = new SocketIOServer(this.httpServer, {
-            cors: { origin: 'http://localhost:4200' }
+            cors: { origin: 'allowedOrigins' }
         });
         this.middlewares();
         this.routes();
