@@ -1,6 +1,6 @@
 import { Server as SocketIOServer, Socket } from 'socket.io';
 import { GoogleGenerativeAI } from "@google/generative-ai";
-
+import models from "../models/chat";
 
 export default function socketController(io: SocketIOServer) {
     const api:any = 'AIzaSyCxPWjdB-YfhmAvLPku3Q62soGovC9R72o'
@@ -35,25 +35,30 @@ export default function socketController(io: SocketIOServer) {
                   const response = await result.response;
                   const text = response.text();
                   console.log (text)
-              
-                  if (text === "SÍ") {
-                    console.log("GROCERO OMEE");
+                  if (text === "SÍ") {  
                     message.mensaje = "Este mensaje no cumple las politicas establecidas"
                     io.to(roomId).emit('message', message);
                   } else if (text === "NO") {
-                    io.to(roomId).emit('message', message);
-                    console.log ("No es groceria")
+                    const newMessage = new models.Message({
+                      sender: message.user,
+                      content: message.mensaje,
+                      timestamp: new Date()
+                    });
+                    const chat = await models.Chat.findById(roomId);
+                    if (chat) {
+                      chat.messages.push(newMessage);
+                      await chat.save();
+                      io.to(roomId).emit(`message:${roomId}`, newMessage); 
+                      console.log("No es grosería");
+                    } else {
+                      console.log("No se encontró la sala de chat con ID:", roomId);
+                    }
                   } else {
                   console.log("No se pudo determinar si hay grocerias en el mensaje");
                 }
                 } catch (error) {
                   console.error("Error de la IA:", error);
                 }
-            
-        
-            
-              
-            // io.to(roomId).emit('message', message);
         });
 
         socket.on('disconnect', () => {
