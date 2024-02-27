@@ -3,7 +3,7 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 import models from "../models/chat";
 
 export default function socketController(io: SocketIOServer) {
-    const api:any = 'AIzaSyCxPWjdB-YfhmAvLPku3Q62soGovC9R72o'
+    const api:any = 'AIzaSyD3X1hc7lKAX0AGelXWwCRf6aWvIFN8BJ8'
 
     console.log (api)
     
