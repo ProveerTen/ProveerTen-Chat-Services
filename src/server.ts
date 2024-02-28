@@ -19,7 +19,7 @@ class Server {
         this.httpServer = http.createServer(this.app);
         const allowedOrigins = ['https://proveerten.netlify.app', 'https://proveer-ten-front-end-git-hu-featurechat-bryctans-projects.vercel.app', 'http://localhost:4200'];
         this.io = new SocketIOServer(this.httpServer, {
-            cors: { origin :'https://proveerten.netlify.app' }
+            cors: { origin : allowedOrigins }
         });
         this.middlewares();
         this.routes();
