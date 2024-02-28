@@ -8,7 +8,7 @@ export const createChat = async (req: Request, res: Response) => {
   const newChat = new model.Chat({
     _id: generateRandomString(10),
     participants: participants,
-    messages: null
+    messages: []
   });
   //console.log(newChat);
   await newChat.save();
