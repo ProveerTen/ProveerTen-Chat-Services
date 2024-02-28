@@ -25,6 +25,7 @@ export const findChat = async (req: Request, res: Response) => {
 
 export const messages = async (req: Request, res: Response) => {
   const chatId = req.body.chatId;
-  let messages = await model.Chat.find({ chatId })
-  res.status(200).json({messages})
+  let chat = await model.Chat.find({ _id: chatId });
+  res.status(200).json({ chat:chat[0] });
 }
+
