@@ -43,8 +43,8 @@ export default function socketController(io: SocketIOServer) {
                   } else if (text === "NO") {
                   */
                     const newMessage = new models.Message({
-                      sender: message.user,
-                      content: message.mensaje,
+                      sender: message.sender,
+                    content: message.content,
                       timestamp: new Date()
                     });
                     const chat = await models.Chat.findById(roomId);
