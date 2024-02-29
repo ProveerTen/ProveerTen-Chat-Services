@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import model from "../models/chat";
 import generateRandomString from "../helpers/generate-string";
+import { data_chat } from "../service/provider";
 
 export const createChat = async (req: Request, res: Response) => {
   let participants = req.body
@@ -29,21 +30,41 @@ export const messages = async (req: Request, res: Response) => {
   res.status(200).json({ chat:chat[0] });
 }
 
+interface Chat {
+  _id:string;
+  participants:Object,
+  dataUser:Object
+};
+
 export const getchats = async (req: Request, res: Response) => {
   try {
-    let role:string = req.body.role;
-    let id:string = req.body.id;
-    let field:any = `participants.${role}Id`;
+    let role: string = req.body.role;
+    let id: string = req.body.id;
+    let field: any = `participants.${role}Id`;
+    let rolecontrary: any = role === 'grocer' ? 'provider' : 'grocer';
+    let chatData: any[] = [];
 
-    let search:any = {};
+    let search: any = {};
     search[field] = id;
 
-    console.log(search);
-    let values:any = role === 'grocer' ? {_id: 1,'participants.providerId': 1 } : {_id: 1, 'participants.grocerId': 1} ;
+    let values: any = role === 'grocer' ? { _id: 1, 'participants.providerId': 1 } : { _id: 1, 'participants.grocerId': 1 };
     let chats = await model.Chat.find(search).select(values);
 
-    res.status(200).json({ chats });
-  } catch (error:any) {
+    for (const chat of chats as any) {
+      let data = await data_chat(chat.participants[rolecontrary + 'Id'], rolecontrary)
+      let info: Chat = {
+        _id : chat._id,
+        participants : chat.participants,
+        dataUser : data[0]
+      }
+      console.log(info);
+      chatData.push(info);
+    }
+
+    console.log(chatData);
+    res.status(200).json({ chatData });
+  } catch (error: any) {
     res.status(500).json({ error: error.message });
   }
+
 }
