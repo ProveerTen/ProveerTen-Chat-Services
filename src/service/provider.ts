@@ -43,3 +43,25 @@ export const data_chat = (id:string, role:any): Promise<any> => {
         })
     });
 }
+
+export const unic_chat = (idGrocer: string, idProvider: string): Promise<any> => {
+
+    const query = "call get_unic_chat(?,?);";
+    return new Promise((resolve, reject) => {
+
+        pool.getConnection((err, connection) => {
+            if (err) {
+                console.log(err);
+                reject(err)
+            }
+            connection.query(query, [idGrocer,idProvider], (error: any, result: any) => {
+                connection.release()
+                if (error) {
+                    return reject(error)
+                }   
+                console.log(result);
+                resolve(result)
+            })
+        })
+    });
+}

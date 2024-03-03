@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import model from "../models/chat";
 import generateRandomString from "../helpers/generate-string";
-import { data_chat } from "../service/provider";
+import { data_chat, unic_chat } from "../service/provider";
 
 export const createChat = async (req: Request, res: Response) => {
   let participants = req.body
@@ -20,20 +20,20 @@ export const createChat = async (req: Request, res: Response) => {
 
 export const findChat = async (req: Request, res: Response) => {
   const participants = req.body;
-  let chat = await model.Chat.find({participants: participants })
+  let chat = await model.Chat.find({ participants: participants })
   res.status(200).json({ chat })
 }
 
 export const messages = async (req: Request, res: Response) => {
   const chatId = req.body.chatId;
   let chat = await model.Chat.find({ _id: chatId });
-  res.status(200).json({ chat:chat[0] });
+  res.status(200).json({ chat: chat[0] });
 }
 
 interface Chat {
-  _id:string;
-  participants:Object,
-  dataUser:Object
+  _id: string;
+  participants: Object,
+  dataUser: Object
 };
 
 export const getchats = async (req: Request, res: Response) => {
@@ -53,9 +53,9 @@ export const getchats = async (req: Request, res: Response) => {
     for (const chat of chats as any) {
       let data = await data_chat(chat.participants[rolecontrary + 'Id'], rolecontrary)
       let info: Chat = {
-        _id : chat._id,
-        participants : chat.participants,
-        dataUser : data[0]
+        _id: chat._id,
+        participants: chat.participants,
+        dataUser: data[0]
       }
       console.log(info);
       chatData.push(info);
@@ -66,5 +66,18 @@ export const getchats = async (req: Request, res: Response) => {
   } catch (error: any) {
     res.status(500).json({ error: error.message });
   }
-
 }
+
+
+export const get_unic_chat = async (req: Request, res: Response) => {
+  try {
+    const { chatId } = req.body;
+    let chat:any = await model.Chat.find({ _id: chatId });
+    
+    let data = await unic_chat(chat[0].participants.grocerId, chat[0].participants.providerId);
+    res.status(200).json({ grocer: data[0], provider: data[1] })
+  } catch (error: any) {
+    res.status(400).json({ error: error.message });
+  }
+}
+
