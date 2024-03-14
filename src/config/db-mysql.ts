@@ -14,10 +14,13 @@ const pool = mysql.createPool({
 
 pool.getConnection((error, connection) => {
     if (error) {
+        console.log(error , 17);
         console.error(`Error connecting to the database "${process.env.DATABASE}"`, error);
         return;
     }
     console.log(`Connection established with the database "${process.env.DATABASE}"`);
+
+    
     connection.release(); // Libera la conexión de prueba
 });
 

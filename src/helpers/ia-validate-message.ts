@@ -4,7 +4,9 @@ const genAI = new GoogleGenerativeAI(process.env.IA_API_KEY!);
 
 
 export const classify_text = async (msg: string) => {
-    console.log(process.env.IA_API_KEY!);
+
+    try {
+        console.log(process.env.IA_API_KEY!);
 
     const prompt = "Me podrías decir, si el siguiente texto contiene groserías de cualquier tipo o palabras denigrantes, responde solo con 'SI' o 'NO'";
     let text = `${prompt} ${msg}`
@@ -22,4 +24,9 @@ export const classify_text = async (msg: string) => {
     } else {
         return 'NO'
     }
+    } catch (error) {
+        console.log("La IA NO FUNCIONA");
+        console.log(error);
+    }
+    
 }
