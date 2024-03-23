@@ -6,6 +6,7 @@ import { Server as SocketIOServer } from 'socket.io';
 import provider from './routes/provider';
 import chat from './routes/chat';
 import socketController from './controllers/socket-controller';
+import chatbot from './routes/chatbot';
 
 class Server {
     private app: express.Application;
@@ -40,12 +41,9 @@ class Server {
     }
 
     routes() {
-        this.app.use('/route', (req, res) => {
-            res.send('Hello World!');
-        });
-
         this.app.use('/provider', provider);
         this.app.use('/chat', chat);
+        this.app.use('/chatbot', chatbot);
     }
 }
 
